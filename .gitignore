@@ -1,0 +1,17 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Databases
+tasks.db
+test_tasks.db
+
+# Environments
+.venv/
+venv/
+ENV/
+
+# OS metadata
+.DS_Store
+Thumbs.db

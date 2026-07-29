@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TaskFlow — Premium Task Manager</title>
+    <meta name="description" content="Manage your daily activities, set priorities, track categories, and organize tasks in dark or light mode with TaskFlow.">
+    <!-- Google Fonts: Plus Jakarta Sans for UI and Inter for body -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- Lucide Icons CDN -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <!-- Custom Style Sheet -->
+    <link rel="stylesheet" href="static/style.css">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Sidebar Navigation -->
+        <aside class="app-sidebar" id="appSidebar">
+            <div class="sidebar-header">
+                <div class="logo-area">
+                    <div class="logo-icon">
+                        <i data-lucide="check-square"></i>
+                    </div>
+                    <h1>TaskFlow</h1>
+                </div>
+            </div>
+
+            <nav class="sidebar-nav">
+                <!-- Status Filters -->
+                <div class="nav-section">
+                    <h2 class="section-title">Status</h2>
+                    <ul class="filter-list">
+                        <li class="filter-item active" data-filter="status" data-value="all" id="filter-status-all">
+                            <i data-lucide="layers" class="icon-sm"></i>
+                            <span>All Tasks</span>
+                            <span class="count-badge" id="count-all">0</span>
+                        </li>
+                        <li class="filter-item" data-filter="status" data-value="pending" id="filter-status-pending">
+                            <i data-lucide="clock" class="icon-sm"></i>
+                            <span>Pending</span>
+                            <span class="count-badge" id="count-pending">0</span>
+                        </li>
+                        <li class="filter-item" data-filter="status" data-value="completed" id="filter-status-completed">
+                            <i data-lucide="check-circle-2" class="icon-sm"></i>
+                            <span>Completed</span>
+                            <span class="count-badge" id="count-completed">0</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Priority Filters -->
+                <div class="nav-section">
+                    <h2 class="section-title">Priority</h2>
+                    <ul class="filter-list">
+                        <li class="filter-item" data-filter="priority" data-value="High" id="filter-priority-high">
+                            <span class="dot-indicator dot-high"></span>
+                            <span>High Priority</span>
+                        </li>
+                        <li class="filter-item" data-filter="priority" data-value="Medium" id="filter-priority-medium">
+                            <span class="dot-indicator dot-medium"></span>
+                            <span>Medium Priority</span>
+                        </li>
+                        <li class="filter-item" data-filter="priority" data-value="Low" id="filter-priority-low">
+                            <span class="dot-indicator dot-low"></span>
+                            <span>Low Priority</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Dynamic Categories Filters -->
+                <div class="nav-section">
+                    <div class="section-header">
+                        <h2 class="section-title">Categories</h2>
+                    </div>
+                    <ul class="filter-list" id="category-filter-list">
+                        <!-- Categories will be injected here by app.js -->
+                    </ul>
+                </div>
+            </nav>
+
+            <div class="sidebar-footer">
+                <div class="credits">
+                    <p>Built with Flask & CSS Glassmorphism</p>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Task Area -->
+        <main class="app-main">
+            <!-- Top Dashboard Header -->
+            <header class="app-header">
+                <div class="header-left">
+                    <button class="mobile-toggle-btn" id="mobileSidebarToggle" aria-label="Toggle Sidebar">
+                        <i data-lucide="menu"></i>
+                    </button>
+                    <div class="header-titles">
+                        <h2 id="greeting-title">Hello there!</h2>
+                        <p class="current-date-text" id="currentDateDisplay">Wednesday, July 29, 2026</p>
+                    </div>
+                </div>
+
+                <div class="header-actions">
+                    <!-- Search Bar -->
+                    <div class="search-container">
+                        <i data-lucide="search" class="search-icon"></i>
+                        <input type="text" id="taskSearchInput" placeholder="Search tasks..." aria-label="Search tasks">
+                    </div>
+
+                    <!-- Theme Toggle -->
+                    <button class="theme-toggle-btn" id="themeToggleButton" title="Toggle Theme" aria-label="Toggle Theme">
+                        <i data-lucide="moon" class="theme-icon-dark"></i>
+                        <i data-lucide="sun" class="theme-icon-light"></i>
+                    </button>
+
+                    <!-- Add New Task Button -->
+                    <button class="btn btn-primary" id="openNewTaskModalBtn">
+                        <i data-lucide="plus"></i>
+                        <span>New Task</span>
+                    </button>
+                </div>
+            </header>
+
+            <!-- Dashboard Stats Panels -->
+            <section class="stats-overview" aria-label="Overview statistics">
+                <div class="stat-card glass-panel">
+                    <div class="stat-icon icon-bg-primary">
+                        <i data-lucide="list-todo"></i>
+                    </div>
+                    <div class="stat-details">
+                        <span class="stat-label">Total Tasks</span>
+                        <h3 class="stat-value" id="stats-total-tasks">0</h3>
+                    </div>
+                </div>
+                <div class="stat-card glass-panel">
+                    <div class="stat-icon icon-bg-success">
+                        <i data-lucide="check-check"></i>
+                    </div>
+                    <div class="stat-details">
+                        <span class="stat-label">Completed</span>
+                        <h3 class="stat-value" id="stats-completed-tasks">0</h3>
+                        <p class="stat-subtext" id="stats-completion-percent">0% completed</p>
+                    </div>
+                </div>
+                <div class="stat-card glass-panel">
+                    <div class="stat-icon icon-bg-warning">
+                        <i data-lucide="hourglass"></i>
+                    </div>
+                    <div class="stat-details">
+                        <span class="stat-label">Pending</span>
+                        <h3 class="stat-value" id="stats-pending-tasks">0</h3>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Task List Control bar -->
+            <section class="task-list-controls">
+                <div class="active-filters-tags" id="activeFiltersTags">
+                    <!-- Filter pills will be rendered dynamically -->
+                </div>
+                
+                <div class="sort-dropdown-container">
+                    <label for="taskSortSelect" class="sort-label">Sort by:</label>
+                    <select id="taskSortSelect" class="sort-select">
+                        <option value="status-asc">Status (Pending First)</option>
+                        <option value="date-newest">Created (Newest first)</option>
+                        <option value="date-oldest">Created (Oldest first)</option>
+                        <option value="due-date">Due Date</option>
+                        <option value="priority-desc">Priority (High to Low)</option>
+                    </select>
+                </div>
+            </section>
+
+            <!-- Tasks Container -->
+            <section class="task-list-section">
+                <div class="task-grid" id="taskGridContainer">
+                    <!-- Cards will be dynamically injected here -->
+                    <!-- Loading state -->
+                    <div class="loading-state">
+                        <div class="spinner"></div>
+                        <p>Loading tasks...</p>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- Task Modal (Add & Edit) -->
+    <div class="modal-backdrop" id="taskModalBackdrop">
+        <div class="modal-container glass-panel animate-scale">
+            <div class="modal-header">
+                <h2 class="modal-title" id="modalTitleText">Add New Task</h2>
+                <button class="modal-close-btn" id="closeModalBtn" aria-label="Close modal">
+                    <i data-lucide="x"></i>
+                </button>
+            </div>
+            
+            <form id="taskForm" class="task-form">
+                <input type="hidden" id="taskFormId" value="">
+                
+                <div class="form-group">
+                    <label for="taskFormTitle">Task Title <span class="required">*</span></label>
+                    <input type="text" id="taskFormTitle" placeholder="What needs to be done?" required autocomplete="off">
+                </div>
+
+                <div class="form-group">
+                    <label for="taskFormDesc">Description</label>
+                    <textarea id="taskFormDesc" rows="3" placeholder="Add some details about this task..."></textarea>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="taskFormCategory">Category</label>
+                        <input type="text" id="taskFormCategory" placeholder="e.g. Work, Personal" list="categorySuggestions">
+                        <datalist id="categorySuggestions">
+                            <option value="Work">
+                            <option value="Personal">
+                            <option value="Shopping">
+                            <option value="Health">
+                            <option value="Study">
+                        </datalist>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="taskFormPriority">Priority</label>
+                        <select id="taskFormPriority">
+                            <option value="Low">Low</option>
+                            <option value="Medium" selected>Medium</option>
+                            <option value="High">High</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="taskFormDueDate">Due Date</label>
+                    <input type="date" id="taskFormDueDate">
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" id="cancelModalBtn">Cancel</button>
+                    <button type="submit" class="btn btn-primary" id="saveTaskSubmitBtn">Save Task</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Toast Notifications Container -->
+    <div class="toast-container" id="toastContainer"></div>
+
+    <!-- Main Front-end Script -->
+    <script src="static/app.js"></script>
+</body>
+</html>
