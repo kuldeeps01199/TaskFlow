@@ -37,21 +37,6 @@ def init_db():
         )
     ''')
 
-    # Seed demo data on first run (when table is empty)
-    cursor.execute("SELECT COUNT(*) FROM tasks")
-    if cursor.fetchone()[0] == 0:
-        sample_tasks = [
-            ('Design new landing page', 'Create wireframes and mockups for the new marketing site', 'Work', 'High', None, 'pending'),
-            ('Buy groceries', 'Milk, eggs, bread, fruits and vegetables for the week', 'Personal', 'Medium', None, 'pending'),
-            ('Read "Atomic Habits"', 'Finish chapters 5–10 and take notes on key takeaways', 'Study', 'Low', None, 'pending'),
-            ('Morning run', '5km jog around the park — track time with phone', 'Health', 'Medium', None, 'completed'),
-            ('Fix login bug', 'Resolve the OAuth token expiry issue reported in issue #42', 'Work', 'High', None, 'completed'),
-        ]
-        cursor.executemany(
-            "INSERT INTO tasks (title, description, category, priority, due_date, status) VALUES (?, ?, ?, ?, ?, ?)",
-            sample_tasks
-        )
-        
     conn.commit()
     conn.close()
 
