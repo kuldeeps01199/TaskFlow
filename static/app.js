@@ -574,11 +574,13 @@ async function toggleTaskStatus(taskId, currentStatus) {
     }
 }
 
-// Delete task entry point (Prompt confirmation first)
+// Delete task entry point — shows custom branded confirmation modal
 function deleteTaskPrompt(taskId) {
-    if (confirm("Are you sure you want to permanently delete this task?")) {
-        deleteTask(taskId);
-    }
+    showConfirmModal(
+        'Delete Task',
+        'Are you sure you want to permanently delete this task? This action cannot be undone.',
+        () => deleteTask(taskId)
+    );
 }
 
 async function deleteTask(taskId) {
@@ -621,6 +623,55 @@ function toggleTheme() {
     document.documentElement.setAttribute('data-theme', next);
     localStorage.setItem('taskflow-theme', next);
     showToast(`Switched to ${next} theme`, 'info');
+}
+
+// -------------------------------------------------------------
+// CUSTOM CONFIRM MODAL
+// -------------------------------------------------------------
+function showConfirmModal(title, message, onConfirm) {
+    // Remove any existing confirm modal
+    const existing = document.getElementById('confirmModalBackdrop');
+    if (existing) existing.remove();
+
+    const backdrop = document.createElement('div');
+    backdrop.id = 'confirmModalBackdrop';
+    backdrop.className = 'modal-backdrop open';
+    backdrop.innerHTML = `
+        <div class="modal-container glass-panel confirm-modal">
+            <div class="confirm-modal-icon">
+                <i data-lucide="alert-triangle"></i>
+            </div>
+            <div class="confirm-modal-logo">
+                <div class="logo-icon" style="width:32px;height:32px;border-radius:8px;">
+                    <i data-lucide="check-square"></i>
+                </div>
+                <span class="confirm-brand">TaskFlow</span>
+            </div>
+            <h3 class="confirm-modal-title">${escapeHTML(title)}</h3>
+            <p class="confirm-modal-message">${escapeHTML(message)}</p>
+            <div class="confirm-modal-actions">
+                <button class="btn btn-secondary" id="confirmCancelBtn">Cancel</button>
+                <button class="btn btn-danger" id="confirmOkBtn">
+                    <i data-lucide="trash-2"></i>
+                    Delete
+                </button>
+            </div>
+        </div>
+    `;
+
+    document.body.appendChild(backdrop);
+    lucide.createIcons();
+
+    // Close on backdrop click
+    backdrop.addEventListener('click', (e) => {
+        if (e.target === backdrop) backdrop.remove();
+    });
+
+    document.getElementById('confirmCancelBtn').addEventListener('click', () => backdrop.remove());
+    document.getElementById('confirmOkBtn').addEventListener('click', () => {
+        backdrop.remove();
+        onConfirm();
+    });
 }
 
 // -------------------------------------------------------------

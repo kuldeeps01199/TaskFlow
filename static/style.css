@@ -998,6 +998,81 @@ body {
 }
 
 /* -------------------------------------------------------------
+ * CUSTOM CONFIRM MODAL
+ * ------------------------------------------------------------- */
+.confirm-modal {
+    max-width: 400px !important;
+    text-align: center;
+    padding: 36px 32px !important;
+}
+
+.confirm-modal-logo {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.confirm-brand {
+    font-family: var(--font-header);
+    font-size: 1.1rem;
+    font-weight: 800;
+    background: linear-gradient(to right, var(--text-primary), var(--text-secondary));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.confirm-modal-icon {
+    width: 56px;
+    height: 56px;
+    background-color: rgba(var(--color-high-raw), 0.12);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 20px;
+    color: var(--color-high);
+}
+
+.confirm-modal-icon i {
+    width: 26px;
+    height: 26px;
+}
+
+.confirm-modal-title {
+    font-family: var(--font-header);
+    font-size: 1.2rem;
+    font-weight: 700;
+    margin-bottom: 10px;
+}
+
+.confirm-modal-message {
+    font-size: 0.88rem;
+    color: var(--text-secondary);
+    line-height: 1.6;
+    margin-bottom: 28px;
+}
+
+.confirm-modal-actions {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+}
+
+.btn-danger {
+    background: linear-gradient(135deg, #ef4444, #dc2626);
+    color: #ffffff;
+    box-shadow: 0 4px 14px rgba(239, 68, 68, 0.35);
+    gap: 8px;
+}
+
+.btn-danger:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(239, 68, 68, 0.45);
+}
+
+/* -------------------------------------------------------------
  * TOAST NOTIFICATIONS
  * ------------------------------------------------------------- */
 .toast-container {
