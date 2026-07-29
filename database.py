@@ -33,20 +33,6 @@ def init_db():
             created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
         )
     ''')
-    
-    # Check if we have any tasks; if not, insert dummy sample tasks for demo purposes
-    cursor.execute('SELECT COUNT(*) FROM tasks')
-    if cursor.fetchone()[0] == 0:
-        sample_tasks = [
-            ('Welcome to your To-Do App!', 'This is a sample task. You can mark it completed, edit its details, or delete it completely!', 'General', 'Low', None, 'pending'),
-            ('Review Project with Mentor', 'Present the Python Flask backend and HTML/CSS/JS frontend logic to my mentor.', 'Work', 'High', '2026-08-01', 'pending'),
-            ('Buy Groceries', 'Milk, eggs, coffee, bread, and fruits.', 'Personal', 'Medium', '2026-07-31', 'pending'),
-            ('Fix UI alignment bugs', 'Make sure the Glassmorphism cards look stunning on mobile screens too!', 'Coding', 'High', '2026-07-30', 'completed')
-        ]
-        cursor.executemany('''
-            INSERT INTO tasks (title, description, category, priority, due_date, status)
-            VALUES (?, ?, ?, ?, ?, ?)
-        ''', sample_tasks)
         
     conn.commit()
     conn.close()
