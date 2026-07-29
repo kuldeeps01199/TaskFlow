@@ -558,14 +558,14 @@ body {
 .task-card {
     display: flex;
     align-items: flex-start;
-    padding: 20px;
+    padding: 20px 20px 20px 28px;
     border-radius: 16px;
     gap: 16px;
     position: relative;
     border: 1px solid var(--glass-border);
     background-color: var(--card-bg);
     box-shadow: var(--shadow-main);
-    overflow: hidden;
+    overflow: visible;
 }
 
 .task-card:hover {
@@ -597,6 +597,8 @@ body {
 .task-checkbox-container {
     padding-top: 2px;
     position: relative;
+    flex-shrink: 0;
+    z-index: 1;
 }
 
 /* Tooltip */
