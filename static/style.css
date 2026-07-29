@@ -596,18 +596,54 @@ body {
 /* Task Checkbox Wrapper */
 .task-checkbox-container {
     padding-top: 2px;
+    position: relative;
+}
+
+/* Tooltip */
+.task-checkbox-container::after {
+    content: 'Click to complete';
+    position: absolute;
+    left: 50%;
+    top: -32px;
+    transform: translateX(-50%);
+    background: rgba(0,0,0,0.75);
+    color: #fff;
+    font-size: 0.7rem;
+    font-weight: 500;
+    padding: 4px 8px;
+    border-radius: 6px;
+    white-space: nowrap;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.2s ease;
+    z-index: 10;
+}
+
+.task-checkbox-container:hover::after {
+    opacity: 1;
+}
+
+.task-card.status-completed .task-checkbox-container::after {
+    content: 'Click to undo';
 }
 
 .custom-checkbox {
-    width: 22px;
-    height: 22px;
+    width: 26px;
+    height: 26px;
     border: 2px solid var(--text-muted);
-    border-radius: 6px;
+    border-radius: 8px;
     cursor: pointer;
     display: flex;
     align-items: center;
     justify-content: center;
     position: relative;
+    transition: all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.custom-checkbox:hover {
+    transform: scale(1.15);
+    background-color: rgba(var(--color-success-raw), 0.15);
+    border-color: var(--color-success);
 }
 
 .task-card.priority-High .custom-checkbox { border-color: rgba(var(--color-high-raw), 0.5); }
@@ -615,11 +651,18 @@ body {
 .task-card.priority-Low .custom-checkbox { border-color: rgba(var(--color-low-raw), 0.5); }
 
 .custom-checkbox i {
-    width: 14px;
-    height: 14px;
-    color: #ffffff;
+    width: 15px;
+    height: 15px;
+    color: var(--color-success);
     opacity: 0;
-    transform: scale(0.6);
+    transform: scale(0.5);
+    transition: all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+/* Show faint checkmark preview on hover (pending tasks only) */
+.task-card.status-pending .custom-checkbox:hover i {
+    opacity: 0.5;
+    transform: scale(1);
 }
 
 .task-card.status-completed .custom-checkbox {
@@ -627,9 +670,26 @@ body {
     border-color: var(--color-success);
 }
 
+.task-card.status-completed .custom-checkbox:hover {
+    background-color: rgba(var(--color-success-raw), 0.7);
+}
+
 .task-card.status-completed .custom-checkbox i {
+    color: #ffffff;
     opacity: 1;
     transform: scale(1);
+}
+
+/* Bounce animation on click */
+@keyframes checkbox-bounce {
+    0%   { transform: scale(1); }
+    40%  { transform: scale(0.8); }
+    70%  { transform: scale(1.3); }
+    100% { transform: scale(1); }
+}
+
+.custom-checkbox.checking {
+    animation: checkbox-bounce 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
 /* Task Content text */

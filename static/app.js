@@ -540,6 +540,14 @@ async function handleFormSubmit(e) {
 async function toggleTaskStatus(taskId, currentStatus) {
     const nextStatus = currentStatus === 'pending' ? 'completed' : 'pending';
     
+    // Trigger bounce animation on the checkbox
+    const card = document.querySelector(`.task-card[data-id="${taskId}"]`);
+    if (card) {
+        const cb = card.querySelector('.custom-checkbox');
+        cb.classList.add('checking');
+        cb.addEventListener('animationend', () => cb.classList.remove('checking'), { once: true });
+    }
+    
     try {
         const response = await fetch(`/api/tasks/${taskId}`, {
             method: 'PUT',
